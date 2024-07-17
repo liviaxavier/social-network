@@ -41,16 +41,14 @@ class AuthMethods {
 
         res = 'success';
       }
-    } on FirebaseAuthException catch(err){
-      if(err.code == 'invalid-email'){
+    } on FirebaseAuthException catch (err) {
+      if (err.code == 'invalid-email') {
         res = 'The email is badly formatted';
       }
-      if(err.code == 'weak-password'){
+      if (err.code == 'weak-password') {
         res = 'Password should be stronger.';
       }
-    }
-    
-    catch (err) {
+    } catch (err) {
       res = err.toString();
     }
 
@@ -58,20 +56,30 @@ class AuthMethods {
   }
 
   // loggin user
-  Future<String> loginUser({
-    required String email,
-    required String password
-  }) async {
+  Future<String> loginUser(
+      {required String email, required String password}) async {
     String res = "Some error occurred";
 
     try {
-      if(email.isNotEmpty && password.isNotEmpty){
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
         res = "success";
       } else {
         res = "Please enter all the fields";
       }
-    } catch (e) {
+    }
+
+    // on FirebaseAuthException catch(e){
+    //   if(e.code == 'user-not-found'){
+
+    //   }
+    //   if(e.code == 'wrong-password'){
+
+    //   }
+    // }
+
+    catch (e) {
       res = e.toString();
     }
     return res;
