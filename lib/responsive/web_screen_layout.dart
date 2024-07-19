@@ -5,6 +5,6 @@ class WebScreenLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Web Screen'));
+    return const Center(child: Text('Web Screen'));
   }
 }
