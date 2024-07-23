@@ -125,7 +125,7 @@ class _PostCardWidgetState extends State<PostCardWidget> {
             },
             child: Stack(alignment: Alignment.center, children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.35,
+                // height: MediaQuery.of(context).size.height * 0.35,
                 width: double.infinity,
                 child: Image.network(
                   widget.snap['postURL'],
@@ -136,11 +136,6 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                 duration: const Duration(milliseconds: 200),
                 opacity: isLikeAnimating ? 1 : 0,
                 child: LikeAnimationWidget(
-                  child: const Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                    size: 150,
-                  ),
                   isAnimating: isLikeAnimating,
                   duration: const Duration(milliseconds: 400),
                   onEnd: () {
@@ -148,6 +143,11 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                       isLikeAnimating = false;
                     });
                   },
+                  child: const Icon(
+                    Icons.favorite,
+                    color: Colors.white,
+                    size: 150,
+                  ),
                 ),
               )
             ]),
