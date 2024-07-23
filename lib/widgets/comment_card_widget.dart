@@ -60,10 +60,11 @@ class _CommentCardWidgetState extends State<CommentCardWidget> {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: Icon(Icons.favorite),
-          )
+          // TODO: IMPLEMENT LIKE COMMENTS
+          // Container(
+          //   padding: const EdgeInsets.all(8),
+          //   child: Icon(Icons.favorite),
+          // )
         ],
       ),
     );
