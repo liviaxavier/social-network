@@ -78,7 +78,7 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                     ),
                   ),
                 ),
-                IconButton(
+                user.uid != widget.snap['uid'] ? Container() : IconButton(
                   onPressed: () {
                     showDialog(
                         context: context,
