@@ -30,7 +30,7 @@ class FirestoreMethods {
           dataPublished: DateTime.now(),
           postURL: photoURL,
           profileImage: profileImage,
-          likes: 0);
+          likes: []);
 
       _firebaseFirestore.collection('posts').doc(postId).set(post.toJson());
       res = "success";
