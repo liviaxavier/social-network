@@ -30,17 +30,19 @@ class _PostCardWidgetState extends State<PostCardWidget> {
 
   void getComments() async {
     try {
-   QuerySnapshot snap = await FirebaseFirestore.instance.collection('posts').doc(widget.snap['postId']).collection('comments').get();
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('comments')
+          .get();
 
-   commentsLenght = snap.docs.length;
-      
+      commentsLenght = snap.docs.length;
     } catch (e) {
       showSnackBar(e.toString(), context);
     }
-    setState(() {
-      
-    });
+    setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
@@ -88,7 +90,11 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                                 children: ['Delete']
                                     .map(
                                       (e) => InkWell(
-                                        onTap: () {},
+                                        onTap: () async {
+                                          await FirestoreMethods().deletePost(
+                                              widget.snap['postId']);
+                                          Navigator.of(context).pop();
+                                        },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 12, horizontal: 16),
@@ -219,13 +225,14 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                 ),
                 InkWell(
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CommentScreen(snap: widget.snap),
-                      )),
+                    builder: (context) => CommentScreen(snap: widget.snap),
+                  )),
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
                       'View all $commentsLenght comments',
-                      style: const TextStyle(fontSize: 16, color: secondaryColor),
+                      style:
+                          const TextStyle(fontSize: 16, color: secondaryColor),
                     ),
                   ),
                 ),
