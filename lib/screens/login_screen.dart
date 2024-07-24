@@ -6,6 +6,7 @@ import 'package:instagram_clone/responsive/responsive_layout_screen.dart';
 import 'package:instagram_clone/responsive/web_screen_layout.dart';
 import 'package:instagram_clone/screens/signup_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/global.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_widget.dart';
 
@@ -62,7 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: mobileBackgroundColor,
       body: SafeArea(
           child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: MediaQuery.of(context).size.width > webScreenSize
+            ? EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 3)
+            : const EdgeInsets.symmetric(horizontal: 32),
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,14 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
             InkWell(
               onTap: loginUser,
               child: Container(
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ))
-                    : const Text(
-                        'Log in',
-                      ),
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -115,32 +111,40 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(4))),
                   color: blueColor,
                 ),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ))
+                    : const Text(
+                        'Log in',
+                      ),
               ),
             ),
             const SizedBox(
               height: 12,
             ),
             Flexible(child: Container(), flex: 2),
+            // transitioning for sing up
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: const Text("Don't you have an account? "),
                   padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const Text("Don't you have an account? "),
                 ),
                 GestureDetector(
                   onTap: navigateToSignup,
                   child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text(
                       "Sign up",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                 ),
               ],
             )
-            // transitioning for sing up
           ],
         ),
       )),

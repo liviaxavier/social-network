@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram_clone/screens/profile_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/global.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -23,77 +24,85 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        title: TextFormField(
-          controller: searchController,
-          decoration: const InputDecoration(labelText: 'Search for a user'),
-          onFieldSubmitted: (String _) {
-            setState(() {
-              isShowUsers = true;
-            });
-          },
+        appBar: AppBar(
+          backgroundColor: mobileBackgroundColor,
+          title: TextFormField(
+            controller: searchController,
+            decoration: const InputDecoration(labelText: 'Search for a user'),
+            onFieldSubmitted: (String _) {
+              setState(() {
+                isShowUsers = true;
+              });
+            },
+          ),
         ),
-      ),
-      body: (isShowUsers && searchController.text != "")
-          ? FutureBuilder(
-              future: FirebaseFirestore.instance
-                  .collection('users')
-                  .where('username',
-                      isGreaterThanOrEqualTo: searchController.text)
-                  .get(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(
-                              uid: (snapshot.data! as dynamic).docs[index]
-                                  ['uid']),
-                        ),
-                      ),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
+        body: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: width > webScreenSize ? width * 0.3 : 0,
+            vertical: width > webScreenSize ? 15 : 0,
+          ),
+          child: (isShowUsers && searchController.text != "")
+              ? FutureBuilder(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .where('username',
+                          isGreaterThanOrEqualTo: searchController.text)
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return ListView.builder(
+                      itemCount: (snapshot.data! as dynamic).docs.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(
+                                  uid: (snapshot.data! as dynamic).docs[index]
+                                      ['uid']),
+                            ),
+                          ),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  (snapshot.data! as dynamic).docs[index]
+                                      ['photoURL']),
+                            ),
+                            title: Text(
                               (snapshot.data! as dynamic).docs[index]
-                                  ['photoURL']),
-                        ),
-                        title: Text(
-                          (snapshot.data! as dynamic).docs[index]['username'],
-                        ),
-                      ),
+                                  ['username'],
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-            )
-          : FutureBuilder(
-              future: FirebaseFirestore.instance.collection('posts').get(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                )
+              : FutureBuilder(
+                  future: FirebaseFirestore.instance.collection('posts').get(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                return MasonryGridView.count(
-                  crossAxisCount: 3,
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) => Image.network(
-                    (snapshot.data! as dynamic).docs[index]['postURL'],
-                    fit: BoxFit.cover,
-                  ),
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 8.0,
-                );
-              },
-            ),
-    );
+                    return MasonryGridView.count(
+                      crossAxisCount: 3,
+                      itemCount: (snapshot.data! as dynamic).docs.length,
+                      itemBuilder: (context, index) => Image.network(
+                        (snapshot.data! as dynamic).docs[index]['postURL'],
+                        fit: BoxFit.cover,
+                      ),
+                      mainAxisSpacing: 8.0,
+                      crossAxisSpacing: 8.0,
+                    );
+                  },
+                ),
+        ));
   }
 }
