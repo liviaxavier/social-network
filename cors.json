@@ -1,0 +1,9 @@
+[
+    {
+        "origin": [
+            "https://social-network-ten-chi.vercel.app/"
+        ],
+        "method": ["GET"],
+        "maxAgeSeconds": 3600
+    }
+  ]
